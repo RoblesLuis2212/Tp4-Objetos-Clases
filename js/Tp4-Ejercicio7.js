@@ -26,8 +26,8 @@ class Agenda {
   constructor(nombre, numeroTelefono) {
     this.#nombre = nombre;
     this.#numeroTelefono = numeroTelefono;
-    this.#tamanio = 10;
-    this.#contactos = [{ contacto: "Luis", numTelefono: "3863401405" }];
+    this.#tamanio = 10; //Definimos un tamaño por defecto
+    this.#contactos = [{ contacto: "Luis", numTelefono: "3863401405" }]; //Los contactos los almacenamos en un array de objetos
   }
   //Metodos getters y setters
   get getNombre() {
@@ -54,17 +54,22 @@ class Agenda {
   set setContactos(nuevoContacto) {
     this.#contactos = nuevoContacto;
   }
+  //Metodo para agregar contactos a al agenda
   agregarContacto(contacto, numTelefono) {
+    //Primero se verifica que la agenda no este llena
     if (this.#contactos.length === this.#tamanio) {
       alert("La agenda esta llena!");
-      return;
+      return; //Evitamos que el programa se siga ejecutando
     }
+    //Invocamos al metodo "exiseContacto" para saber si el contacto existe o no en la agenda
     const contacto_valido = this.existeContacto(contacto, numTelefono);
-    this.#contactos.push(contacto_valido);
+    this.#contactos.push(contacto_valido); //Si no existe lo agregamos
     alert("Contacto agregado exitosamente");
-    console.log(this.#contactos);
+    console.log(this.#contactos); //Linea para verificar que se agrego el elemento al array
   }
+  //Metodo para verificar la existencia de los contactos en la agenda
   existeContacto(contacto, numTelefono) {
+    //Si el telefono o el contacto esta dentro del array mostraremos el mensaje
     while (
       this.#contactos.some(
         (conct) =>
@@ -74,16 +79,19 @@ class Agenda {
       alert(
         `El contacto ${contacto} o el numero ${numTelefono} ya existe en la agenda`
       );
+      //Si el contacto no esta en la agenda solicitamos que los cargue
       contacto = prompt("Ingrese un nuevo contacto: ");
       numTelefono = prompt("Ingrese su numero de telefono: ");
     }
     return { contacto, numTelefono };
   }
+  //Este metodo es para verificar la existencia del contacto dentro del menu
   existe(nombre, numTelefono) {
     return this.#contactos.some(
       (c) => c.contacto === nombre || c.numTelefono === numTelefono
     );
   }
+  //Metodo para listar los contactos
   listarContactos() {
     document.writeln(`<h2>Lista Contactos</h2>`);
     document.writeln(`<ul>`);
@@ -95,18 +103,23 @@ class Agenda {
     }
     document.writeln(`</ul>`);
   }
+  //Metodo para buscar el contacto, lo haremos por nombre
   buscarContacto(nombre) {
-    const buscar = this.#contactos.find((c) => c.contacto === nombre);
+    const buscar = this.#contactos.find((c) => c.contacto === nombre); //Find busca el contacto en el array
+    //Si lo encuentra mostramos su nombre y el numero de telefono
     if (buscar) {
       document.writeln(
         `<p>Numero de telefono de ${buscar.contacto} es ${buscar.numTelefono}</p>`
       );
+      //Caso contrario le avisamos al usuario que no existe
     } else {
       document.writeln(`<p>El contacto ingresado no existe</p>`);
     }
   }
+  //Metodo para eliminar contacto, por nombre
   eliminarContacto(contacto) {
-    const indice = this.#contactos.findIndex((c) => c.contacto === contacto);
+    const indice = this.#contactos.findIndex((c) => c.contacto === contacto); //Primero buscamos el indice
+    //Si se encontro devuelve indice -1 y procede a eliminarlo
     if (indice !== -1) {
       this.#contactos.splice(indice, 1);
       alert("Contacto eliminado correctamente");
@@ -115,13 +128,15 @@ class Agenda {
     }
     console.log(this.#contactos);
   }
+  //Metodo para verificar si la agenda esta llena
   AgendaLlena() {
     if (this.#contactos.length > 10) {
       document.writeln(`<p>Agenda llena!</p>`);
     }
   }
+  //Metodo para verificar los huecos libres
   huecosLibres() {
-    const huecosDisponibles = this.#tamanio - this.#contactos.length;
+    const huecosDisponibles = this.#tamanio - this.#contactos.length; //Calculamos huecos libres
     document.writeln(
       `<p>Huecos disponibles en la agenda: ${huecosDisponibles}</p>`
     );
@@ -130,9 +145,10 @@ class Agenda {
 
 //Programa principal
 function Menu() {
-  const obj1 = new Agenda("Luis", "3863401405");
-  let opcion;
+  const obj1 = new Agenda("Luis", "3863401405"); //Creamos un objeto para poder acceder a los metodos
+  let opcion; //Declaramos variable
   do {
+    //Ilustramos un menu
     opcion = prompt(
       "-------------------------------Agenda-----------------------------\n" +
         "1.Agregar Contacto\n" +
@@ -144,6 +160,7 @@ function Menu() {
         "7.Veficar espacio libre en agenda\n" +
         "8.Salir"
     );
+    //Utilizamos un switch para ir ejecutando las diferentes opciones segun lo ingresado por el usuario
     switch (opcion) {
       case "1":
         const nombre = prompt("Ingrese el nombre del contacto: ");
@@ -187,9 +204,8 @@ function Menu() {
         break;
       default:
         alert("Opcion invalida");
-        Menu();
     }
   } while (opcion !== "8");
 }
 
-Menu();
+Menu(); //Llamada al metodo
