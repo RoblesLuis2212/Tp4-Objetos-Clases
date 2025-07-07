@@ -79,6 +79,11 @@ class Agenda {
     }
     return { contacto, numTelefono };
   }
+  existe(nombre, numTelefono) {
+    return this.#contactos.some(
+      (c) => c.contacto === nombre || c.numTelefono === numTelefono
+    );
+  }
   listarContactos() {
     document.writeln(`<h2>Lista Contactos</h2>`);
     document.writeln(`<ul>`);
@@ -124,8 +129,67 @@ class Agenda {
 }
 
 //Programa principal
-const objeto1 = new Agenda("Luis", "2863401405");
-const nombre = prompt("Ingrese el nombre del contacto a eliminar: ");
-objeto1.eliminarContacto(nombre);
-objeto1.AgendaLlena();
-objeto1.huecosLibres();
+function Menu() {
+  const obj1 = new Agenda("Luis", "3863401405");
+  let opcion;
+  do {
+    opcion = prompt(
+      "-------------------------------Agenda-----------------------------\n" +
+        "1.Agregar Contacto\n" +
+        "2.Verificar si existe un contacto\n" +
+        "3.Listar contactos\n" +
+        "4.Buscar contacto\n" +
+        "5.Eliminar contacto\n" +
+        "6.Verificar Estado de agenda\n" +
+        "7.Veficar espacio libre en agenda\n" +
+        "8.Salir"
+    );
+    switch (opcion) {
+      case "1":
+        const nombre = prompt("Ingrese el nombre del contacto: ");
+        const telefono = prompt("Ingrese el telefono del contato: ");
+        obj1.agregarContacto(nombre, telefono);
+        break;
+
+      case "2":
+        const nombre_e = prompt(
+          "Ingrese el nombre del contacto para ver si existen en la agenda: "
+        );
+        const telefono_e = prompt(
+          "Ingrese el telefono del contacto para ver si existe en la agenda: "
+        );
+        if (obj1.existe(nombre_e, telefono_e)) {
+          alert(`El contacto ya existe en la agenda`);
+        } else {
+          alert(`El contacto no existe la agenda`);
+        }
+        break;
+      case "3":
+        obj1.listarContactos();
+        break;
+      case "4":
+        const contacto_buscar = prompt(
+          "Ingrese el nombre del contacto a buscar: "
+        );
+        obj1.buscarContacto(contacto_buscar);
+        break;
+      case "5":
+        const contacto_eliminar = prompt(
+          "Ingrese el nombr del contacto a eliminar: "
+        );
+        obj1.eliminarContacto(contacto_eliminar);
+        break;
+      case "6":
+        obj1.AgendaLlena();
+        break;
+      case "7":
+        obj1.huecosLibres();
+        break;
+      default:
+        alert("Opcion invalida");
+        Menu();
+    }
+  } while (opcion !== "8");
+}
+
+Menu();
